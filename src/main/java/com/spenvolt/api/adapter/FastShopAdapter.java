@@ -1,7 +1,6 @@
 package com.spenvolt.api.adapter;
 
-import com.spenvolt.api.model.Product;
-import org.springframework.stereotype.Component;
+import com.spenvolt.api.model.Device;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URLEncoder;
@@ -13,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 // @Component
-public class FastShopAdapter implements ProductAdapter {
+public class FastShopAdapter implements DeviceAdapter {
 
     private static final int MAX_RESULTS = 20;
     private final RestTemplate restTemplate;
@@ -24,8 +23,8 @@ public class FastShopAdapter implements ProductAdapter {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Product> search(String query) {
-        List<Product> products = new ArrayList<>();
+    public List<Device> search(String query) {
+        List<Device> devices = new ArrayList<>();
 
         try {
             String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
@@ -38,7 +37,7 @@ public class FastShopAdapter implements ProductAdapter {
             List<Map<String, Object>> response = restTemplate.getForObject(targetUrl, List.class);
 
             if (response == null || response.isEmpty()) {
-                return products;
+                return devices;
             }
 
             for (Map<String, Object> item : response) {
@@ -68,16 +67,16 @@ public class FastShopAdapter implements ProductAdapter {
                 }
 
                 if (name != null && price != null) {
-                    Product p = new Product();
+                    Device p = new Device();
                     p.setName(name);
                     p.setSource("fastshop");
                     p.setPrice(price);
                     p.setOriginalPrice(null);
                     p.setPower(extractPower(name)); // Identifica 1000W, 220V, etc., no título
                     p.setImageUrl(imageUrl);
-                    p.setProductUrl(link);
+                    p.setDeviceUrl(link);
 
-                    products.add(p);
+                    devices.add(p);
                 }
             }
 
@@ -85,7 +84,7 @@ public class FastShopAdapter implements ProductAdapter {
             System.err.println("Erro ao buscar no endpoint VTEX (FastShop): " + e.getMessage());
         }
 
-        return products;
+        return devices;
     }
 
     @Override

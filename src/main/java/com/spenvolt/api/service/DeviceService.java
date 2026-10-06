@@ -1,8 +1,8 @@
 package com.spenvolt.api.service;
 
-import com.spenvolt.api.adapter.ProductAdapter;
-import com.spenvolt.api.model.Product;
-import com.spenvolt.api.repository.ProductRepository;
+import com.spenvolt.api.adapter.DeviceAdapter;
+import com.spenvolt.api.model.Device;
+import com.spenvolt.api.repository.DeviceRepository;
 import jakarta.persistence.Id;
 import org.springframework.stereotype.Service;
 
@@ -12,40 +12,40 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-public class ProductService {
+public class DeviceService {
 
-    private final List<ProductAdapter> adapters;
-    private final ProductRepository repository;
+    private final List<DeviceAdapter> adapters;
+    private final DeviceRepository repository;
 
-    public ProductService(
-            List<ProductAdapter> adapters,
-            ProductRepository repository
+    public DeviceService(
+            List<DeviceAdapter> adapters,
+            DeviceRepository repository
     ) {
         this.adapters = adapters;
         this.repository = repository;
     }
 
-    public List<Product> search(String query) {
+    public List<Device> search(String query) {
 
-        List<Product> results = new ArrayList<>();
+        List<Device> results = new ArrayList<>();
 
-        for (ProductAdapter adapter : adapters) {
+        for (DeviceAdapter adapter : adapters) {
 
             if (!adapter.isAvailable()) {
                 continue;
             }
 
             try {
-                List<Product> found = adapter.search(query);
+                List<Device> found = adapter.search(query);
 
-                for (Product product : found) {
+                for (Device device : found) {
 
                     // Se já existe exatamente igual, não salva novamente
-                    if (exists(product)) {
+                    if (exists(device)) {
                         continue;
                     }
 
-                    Product saved = repository.save(product);
+                    Device saved = repository.save(device);
 
                     results.add(saved);
                 }
@@ -58,13 +58,13 @@ public class ProductService {
         return repository.findAll();
     }
 
-    private boolean exists(Product product) {
+    private boolean exists(Device device) {
 
-        List<Product> products = repository.findAll();
+        List<Device> devices = repository.findAll();
 
-        for (Product existing : products) {
+        for (Device existing : devices) {
 
-            if (sameProduct(product, existing)) {
+            if (sameDevice(device, existing)) {
                 return true;
             }
         }
@@ -72,10 +72,10 @@ public class ProductService {
         return false;
     }
 
-    private boolean sameProduct(Product product1, Product product2) {
+    private boolean sameDevice(Device device1, Device device2) {
 
         try {
-            for (Field field : Product.class.getDeclaredFields()) {
+            for (Field field : Device.class.getDeclaredFields()) {
 
                 // Ignora somente o ID
                 if (field.isAnnotationPresent(Id.class)) {
@@ -85,8 +85,8 @@ public class ProductService {
                 field.setAccessible(true);
 
                 if (!Objects.equals(
-                        field.get(product1),
-                        field.get(product2)
+                        field.get(device1),
+                        field.get(device2)
                 )) {
                     return false;
                 }

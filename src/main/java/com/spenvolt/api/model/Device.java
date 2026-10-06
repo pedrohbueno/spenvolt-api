@@ -13,7 +13,7 @@ import lombok.Data;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Product {
+public class Device {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -23,7 +23,7 @@ public class Product {
     private Float price;
     private Float originalPrice;
     private String imageUrl;
-    private String productUrl;
+    private String deviceUrl;
     private String power;
     
 }

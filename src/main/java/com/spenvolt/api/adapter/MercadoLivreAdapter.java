@@ -1,7 +1,6 @@
 package com.spenvolt.api.adapter;
 
-import com.spenvolt.api.model.Product;
-import org.springframework.stereotype.Component;
+import com.spenvolt.api.model.Device;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -15,13 +14,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 // @Component
-public class MercadoLivreAdapter implements ProductAdapter {
+public class MercadoLivreAdapter implements DeviceAdapter {
 
     private static final int MAX_RESULTS = 20;
 
     @Override
-    public List<Product> search(String query) {
-        List<Product> products = new ArrayList<>();
+    public List<Device> search(String query) {
+        List<Device> devices = new ArrayList<>();
 
         try {
             String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
@@ -53,21 +52,21 @@ public class MercadoLivreAdapter implements ProductAdapter {
             int count = 0;
 
             while (matcher.find() && count < MAX_RESULTS) {
-                String productUrl = matcher.group(1);
+                String deviceUrl = matcher.group(1);
                 String imageUrl = matcher.group(2);
                 String name = matcher.group(3).trim();
                 String priceStr = matcher.group(4).replace(".", "").replace(",", ".").trim();
 
-                Product p = new Product();
+                Device p = new Device();
                 p.setName(name);
                 p.setSource("mercadolivre");
                 p.setPrice(Float.parseFloat(priceStr));
                 p.setOriginalPrice(null); // Pode ser capturado se houver tag de desconto
                 p.setPower(extractPower(name));
                 p.setImageUrl(imageUrl);
-                p.setProductUrl(productUrl);
+                p.setDeviceUrl(deviceUrl);
 
-                products.add(p);
+                devices.add(p);
                 count++;
             }
 
@@ -75,7 +74,7 @@ public class MercadoLivreAdapter implements ProductAdapter {
             System.err.println("Erro ao buscar no Mercado Livre: " + e.getMessage());
         }
 
-        return products;
+        return devices;
     }
 
     @Override
