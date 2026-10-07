@@ -1,13 +1,12 @@
 package com.spenvolt.api.model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Data;
+
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -25,5 +24,20 @@ public class Device {
     private String imageUrl;
     private String deviceUrl;
     private String power;
+    private String brand;
+    private String model;
+    private String category;
+
+    @ManyToOne
+    @JoinColumn(name = "residence_id")
+    private Residence residence;
+    private List<Member> members;
+
+    public Double calcMonthlyKwh(){
+        return 0.0;
+    }
+    public Double calcMonthlyCost(){
+        return 0.0;
+    }
     
 }
