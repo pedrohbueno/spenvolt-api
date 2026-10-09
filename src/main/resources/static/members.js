@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8000/api/members";
+const API_URL = "http://localhost:8080/api/members";
 
 // CADASTRAR UM MEMBRO
 // Recebe os dados do formulário (ou usa o exemplo abaixo se nada for passado).
