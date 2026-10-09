@@ -1,101 +1,95 @@
 package com.spenvolt.api.service;
 
-import com.spenvolt.api.adapter.DeviceAdapter;
+import com.spenvolt.api.dto.DeviceRequestDTO;
+import com.spenvolt.api.dto.DeviceResponseDTO;
 import com.spenvolt.api.model.Device;
+import com.spenvolt.api.model.Member;
 import com.spenvolt.api.repository.DeviceRepository;
-import jakarta.persistence.Id;
+import com.spenvolt.api.repository.MemberRepository;
+import com.spenvolt.api.repository.ResidenceRepository;
+import com.spenvolt.api.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
+import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class DeviceService {
 
-    private final List<DeviceAdapter> adapters;
-    private final DeviceRepository repository;
+    private final DeviceRepository deviceRepository;
+    private final UserRepository userRepository;
+    private final ResidenceRepository residenceRepository;
+    private final MemberRepository memberRepository;
 
-    public DeviceService(
-            List<DeviceAdapter> adapters,
-            DeviceRepository repository
-    ) {
-        this.adapters = adapters;
-        this.repository = repository;
+    @Transactional
+    public DeviceResponseDTO create(DeviceRequestDTO req) {
+        Device d = new Device();
+        d.setName(req.getName());
+        d.setBrand(req.getBrand());
+        d.setModel(req.getModel());
+        d.setCategory(req.getCategory());
+        d.setPower(req.getPower());
+        d.setImageUrl(req.getImageUrl());
+        d.setResidence(residenceRepository.findById(req.getResidenceId()).orElseThrow());
+
+        if (req.getMemberIds() != null) {
+            for (Integer memberId : req.getMemberIds()) {
+                Member member = memberRepository.findById(memberId)
+                        .orElseThrow(() -> new RuntimeException(
+                                "Membro não encontrado: " + memberId
+                        ));
+
+                d.getMembers().add(member);
+            }
+        }
+        return toResponse(deviceRepository.save(d));
     }
 
-    public List<Device> search(String query) {
+    @Transactional(readOnly = true)
+    public DeviceResponseDTO findById(int id) {
+        return toResponse(deviceRepository.findById(id).orElseThrow());
+    }
 
-        List<Device> results = new ArrayList<>();
+    @Transactional(readOnly = true)
+    public List<DeviceResponseDTO> findByResidence(int residenceId) {
+        List<DeviceResponseDTO> result = new ArrayList<>();
+        for (Device d : deviceRepository.findByResidenceId(residenceId)) {
+            result.add(toResponse(d));
+        }
+        return result;
+    }
 
-        for (DeviceAdapter adapter : adapters) {
+    private DeviceResponseDTO toResponse(Device d) {
+        DeviceResponseDTO dto = new DeviceResponseDTO();
+        dto.setId(d.getId());
+        dto.setName(d.getName());
+        dto.setBrand(d.getBrand());
+        dto.setModel(d.getModel());
+        dto.setCategory(d.getCategory());
+        dto.setPower(d.getPower());
+        dto.setImageUrl(d.getImageUrl());
+        dto.setMonthlyKwh(d.calcMonthlyKwh());
 
-            if (!adapter.isAvailable()) {
-                continue;
-            }
+        if (d.getResidence() != null) {
+            dto.setResidenceId(d.getResidence().getId());
+            dto.setMonthlyCost(d.calcMonthlyCost(d.getResidence().getTariff()));
+        }
 
-            try {
-                List<Device> found = adapter.search(query);
+        Set<Integer> memberIds = new HashSet<>();
 
-                for (Device device : found) {
-
-                    // Se já existe exatamente igual, não salva novamente
-                    if (exists(device)) {
-                        continue;
-                    }
-
-                    Device saved = repository.save(device);
-
-                    results.add(saved);
-                }
-
-            } catch (Exception e) {
-                System.err.println("Adapter falhou: " + e.getMessage());
+        // Um dispositivo sem membros deve retornar uma coleção vazia.
+        if (d.getMembers() != null) {
+            for (Member m : d.getMembers()) {
+                memberIds.add(m.getId());
             }
         }
 
-        return repository.findAll();
-    }
-
-    private boolean exists(Device device) {
-
-        List<Device> devices = repository.findAll();
-
-        for (Device existing : devices) {
-
-            if (sameDevice(device, existing)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private boolean sameDevice(Device device1, Device device2) {
-
-        try {
-            for (Field field : Device.class.getDeclaredFields()) {
-
-                // Ignora somente o ID
-                if (field.isAnnotationPresent(Id.class)) {
-                    continue;
-                }
-
-                field.setAccessible(true);
-
-                if (!Objects.equals(
-                        field.get(device1),
-                        field.get(device2)
-                )) {
-                    return false;
-                }
-            }
-
-            return true;
-
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+        dto.setMemberIds(memberIds);
+        return dto;
     }
 }

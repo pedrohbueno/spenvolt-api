@@ -1,32 +1,35 @@
 package com.spenvolt.api.controller;
 
-import com.spenvolt.api.model.Device;
-import com.spenvolt.api.service.DeviceService;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import com.spenvolt.api.dto.DeviceRequestDTO;
+import com.spenvolt.api.dto.DeviceResponseDTO;
+import com.spenvolt.api.service.DeviceService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
 @RestController
-@RequestMapping("/products")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/devices")
+@RequiredArgsConstructor
 public class DeviceController {
 
-    // Service responsável pela lógica de busca dos produtos.
-    private final DeviceService service;
+    private final DeviceService deviceService;
 
-    // O Spring injeta automaticamente o ProductService.
-    public DeviceController(DeviceService service) {
-        this.service = service;
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public DeviceResponseDTO create(@RequestBody DeviceRequestDTO req) {
+        return deviceService.create(req);
     }
 
-    // Endpoint:
-    // GET /products/search?query=geladeira
-    //
-    // O @RequestParam pega o valor de "query" da URL.
-    @GetMapping("/search")
-    public List<Device> search(@RequestParam String query) {
+    @GetMapping("/{id}")
+    public DeviceResponseDTO findById(@PathVariable int id) {
+        return deviceService.findById(id);
+    }
 
-        // Passa a pesquisa para o Service.
-        return service.search(query);
+    @GetMapping("/residence/{residenceId}")
+    public List<DeviceResponseDTO> findByResidence(@PathVariable int residenceId) {
+        return deviceService.findByResidence(residenceId);
     }
 }
