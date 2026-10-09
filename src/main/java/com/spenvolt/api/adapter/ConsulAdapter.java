@@ -95,7 +95,7 @@ public class ConsulAdapter implements DeviceAdapter {
                     p.setSource("consul");
                     p.setPrice(price);
                     p.setOriginalPrice(null);
-                    p.setPower(power);
+                    p.setPower(Double.valueOf(power));
                     p.setImageUrl(imageUrl);
                     p.setDeviceUrl(link);
 

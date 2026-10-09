@@ -95,12 +95,12 @@ public class FastShopAdapter implements DeviceAdapter {
     /**
      * Extrai padrões de potência e voltagem do título do produto
      */
-    private String extractPower(String text) {
+    private Double extractPower(String text) {
         Pattern pattern = Pattern.compile("(\\d+\\s*(?:W|watts|kW|V|Volts))", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(text);
         if (matcher.find()) {
-            return matcher.group(1);
+            return Double.valueOf(matcher.group(1));
         }
-        return "Não informada";
+        return 0.0;
     }
 }

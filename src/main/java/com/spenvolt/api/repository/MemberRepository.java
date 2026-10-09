@@ -1,11 +1,11 @@
 package com.spenvolt.api.repository;
 
-import com.spenvolt.api.model.Device;
+import com.spenvolt.api.model.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface DeviceRepository extends JpaRepository<Device, Integer>{
-    Device[] findByResidenceId(int residenceId);
+public interface MemberRepository extends JpaRepository<Member, Integer>{
+    Member[] findByResidenceId(int residenceId);
 }

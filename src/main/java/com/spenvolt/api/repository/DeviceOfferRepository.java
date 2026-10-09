@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface DeviceRepository extends JpaRepository<Device, Integer>{
-    Device[] findByResidenceId(int residenceId);
+public interface DeviceOfferRepository extends JpaRepository<Device, Long>{
 }

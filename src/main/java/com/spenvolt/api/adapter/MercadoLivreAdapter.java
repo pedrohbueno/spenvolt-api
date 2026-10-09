@@ -62,7 +62,7 @@ public class MercadoLivreAdapter implements DeviceAdapter {
                 p.setSource("mercadolivre");
                 p.setPrice(Float.parseFloat(priceStr));
                 p.setOriginalPrice(null); // Pode ser capturado se houver tag de desconto
-                p.setPower(extractPower(name));
+                p.setPower(Double.valueOf(extractPower(name)));
                 p.setImageUrl(imageUrl);
                 p.setDeviceUrl(deviceUrl);
 
