@@ -1,14 +1,13 @@
 const API_URL = "http://localhost:8000/api/members";
 
 // CADASTRAR UM MEMBRO
-async function criarMember() {
-    const member = {
-        name: "Membro de teste",
-        email: "membro@teste.com",
-        photoUrl: "https://example.com/foto.jpg",
-        residenceId: 1
-    };
-
+// Recebe os dados do formulário (ou usa o exemplo abaixo se nada for passado).
+async function criarMember(member = {
+    name: "Membro de teste",
+    email: "membro@teste.com",
+    photoUrl: "https://example.com/foto.jpg",
+    residenceId: 1
+}) {
     const response = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -29,7 +28,7 @@ async function buscarMember(id) {
     const response = await fetch(`${API_URL}/${id}`);
 
     if (!response.ok) {
-        throw new Error(`Erro ao buscar membro: ${response.status}`);
+        throw new Error(`Erro ao buscar membro: ${response.status} - ${await response.text()}`);
     }
 
     const member = await response.json();
@@ -38,11 +37,12 @@ async function buscarMember(id) {
 }
 
 // LISTAR MEMBROS DE UMA RESIDÊNCIA
+// Rota do controller: GET /api/members?residenceId={id}
 async function listarMembersPorResidencia(residenceId) {
-    const response = await fetch(`${API_URL}/residence/${residenceId}`);
+    const response = await fetch(`${API_URL}?residenceId=${residenceId}`);
 
     if (!response.ok) {
-        throw new Error(`Erro ao listar membros: ${response.status}`);
+        throw new Error(`Erro ao listar membros: ${response.status} - ${await response.text()}`);
     }
 
     const members = await response.json();
@@ -50,7 +50,7 @@ async function listarMembersPorResidencia(residenceId) {
     return members;
 }
 
-// EXEMPLOS DE EXECUÇÃO
+// EXEMPLOS DE EXECUÇÃO (não roda mais sozinho: chame executar() no console se quiser testar)
 async function executar() {
     try {
         await criarMember();
@@ -60,6 +60,3 @@ async function executar() {
         console.error("Falha na requisição:", error);
     }
 }
-
-executar();
-

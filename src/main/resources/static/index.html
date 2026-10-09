@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Início · SpenVolt</title>
+  <link rel="icon" href="spenvolt-verde.svg">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-body-tertiary">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+      <img src="spenvolt-verde.svg" width="34"/>
+      <span class="fw-bold">Spen<span style="color:#00AEEF">Volt</span></span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Abrir menu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="menu">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Usuários</a>
+          <ul class="dropdown-menu"><li><a class="dropdown-item" href="users-criar.html">Cadastrar usuário</a></li><li><a class="dropdown-item" href="users-buscar.html">Buscar usuário por ID</a></li></ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Residências</a>
+          <ul class="dropdown-menu"><li><a class="dropdown-item" href="residences-criar.html">Cadastrar residência</a></li><li><a class="dropdown-item" href="residences-buscar.html">Buscar residência por ID</a></li><li><a class="dropdown-item" href="residences-listar.html">Listar residências de um usuário</a></li></ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Dispositivos</a>
+          <ul class="dropdown-menu"><li><a class="dropdown-item" href="devices-criar.html">Cadastrar dispositivo</a></li><li><a class="dropdown-item" href="devices-buscar.html">Buscar dispositivo por ID</a></li><li><a class="dropdown-item" href="devices-listar.html">Listar dispositivos de uma residência</a></li></ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Membros</a>
+          <ul class="dropdown-menu"><li><a class="dropdown-item" href="members-criar.html">Cadastrar membro</a></li><li><a class="dropdown-item" href="members-buscar.html">Buscar membro por ID</a></li><li><a class="dropdown-item" href="members-listar.html">Listar membros de uma residência</a></li></ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<main class="container pb-5">
+  <div class="text-center py-4">
+    <img src="spenvolt-verde.svg" width="100"/>
+    <h1 class="display-5 fw-bold mt-2">Spen<span style="color:#00AEEF">Volt</span></h1>
+    <p class="lead text-body-secondary">Controle o consumo de energia da sua casa.</p>
+  </div>
+  <div class="row g-4">
+    <div class="col-md-6">
+      <div class="card h-100 shadow-sm">
+        <div class="card-header fw-semibold">👤 Usuários</div>
+        <div class="list-group list-group-flush"><a href="users-criar.html" class="list-group-item list-group-item-action"><div class="fw-semibold">Cadastrar usuário</div><small class="text-body-secondary"><code>POST /api/users</code></small></a><a href="users-buscar.html" class="list-group-item list-group-item-action"><div class="fw-semibold">Buscar usuário por ID</div><small class="text-body-secondary"><code>GET /api/users/{id}</code></small></a></div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card h-100 shadow-sm">
+        <div class="card-header fw-semibold">🏠 Residências</div>
+        <div class="list-group list-group-flush"><a href="residences-criar.html" class="list-group-item list-group-item-action"><div class="fw-semibold">Cadastrar residência</div><small class="text-body-secondary"><code>POST /api/residences</code></small></a><a href="residences-buscar.html" class="list-group-item list-group-item-action"><div class="fw-semibold">Buscar residência por ID</div><small class="text-body-secondary"><code>GET /api/residences/{id}</code></small></a><a href="residences-listar.html" class="list-group-item list-group-item-action"><div class="fw-semibold">Listar residências de um usuário</div><small class="text-body-secondary"><code>GET /api/residences?userId={id}</code></small></a></div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card h-100 shadow-sm">
+        <div class="card-header fw-semibold">🔌 Dispositivos</div>
+        <div class="list-group list-group-flush"><a href="devices-criar.html" class="list-group-item list-group-item-action"><div class="fw-semibold">Cadastrar dispositivo</div><small class="text-body-secondary"><code>POST /api/devices</code></small></a><a href="devices-buscar.html" class="list-group-item list-group-item-action"><div class="fw-semibold">Buscar dispositivo por ID</div><small class="text-body-secondary"><code>GET /api/devices/{id}</code></small></a><a href="devices-listar.html" class="list-group-item list-group-item-action"><div class="fw-semibold">Listar dispositivos de uma residência</div><small class="text-body-secondary"><code>GET /api/devices/residence/{id}</code></small></a></div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card h-100 shadow-sm">
+        <div class="card-header fw-semibold">👥 Membros</div>
+        <div class="list-group list-group-flush"><a href="members-criar.html" class="list-group-item list-group-item-action"><div class="fw-semibold">Cadastrar membro</div><small class="text-body-secondary"><code>POST /api/members</code></small></a><a href="members-buscar.html" class="list-group-item list-group-item-action"><div class="fw-semibold">Buscar membro por ID</div><small class="text-body-secondary"><code>GET /api/members/{id}</code></small></a><a href="members-listar.html" class="list-group-item list-group-item-action"><div class="fw-semibold">Listar membros de uma residência</div><small class="text-body-secondary"><code>GET /api/members?residenceId={id}</code></small></a></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

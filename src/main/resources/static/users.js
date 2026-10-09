@@ -1,16 +1,13 @@
 const API_URL = "http://localhost:8000/api/users";
 
 // CADASTRAR UM USUÁRIO
-async function criarUser() {
-    const user = {
-        name: "pedrohbueno",
-        email: "pedrohbueno.contato@gmail.com",
-        photoUrl: "https://avatars.githubusercontent.com/u/153121748?v=4",
-        active: true,
-        last_login_at: new Date().toISOString(),
-        password_hash: "11fefe8123f8h7"
-    };
-
+// Recebe os dados do formulário (ou usa o exemplo abaixo se nada for passado).
+async function criarUser(user = {
+    name: "pedrohbueno",
+    email: "pedrohbueno.contato@gmail.com",
+    password: "11fefe8123f8h7",
+    photoUrl: "https://avatars.githubusercontent.com/u/153121748?v=4"
+}) {
     const response = await fetch(API_URL, {
         method: "POST",
         headers: {
@@ -47,13 +44,11 @@ async function buscarUser(id) {
     return user;
 }
 
-// EXEMPLOS DE EXECUÇÃO
+// EXEMPLOS DE EXECUÇÃO (não roda mais sozinho: chame executar() no console se quiser testar)
 async function executar() {
     try {
-        // Cadastra um usuário
         const userCriado = await criarUser();
 
-        // Busca o usuário pelo ID retornado pela API
         if (userCriado.id != null) {
             await buscarUser(userCriado.id);
         } else {
@@ -63,5 +58,3 @@ async function executar() {
         console.error("Falha na requisição:", error);
     }
 }
-
-executar();

@@ -1,23 +1,20 @@
-
 const API_URL = "http://localhost:8000/api/devices";
 
 // CADASTRAR UM DISPOSITIVO
-async function criarDevice() {
-    const device = {
-        name: "Sensor de temperatura",
-        source: "Amazon",
-        price: 99.90,
-        originalPrice: 129.90,
-        imageUrl: "https://example.com/sensor.jpg",
-        deviceUrl: "https://example.com/produto",
-        power: 5.0,
-        brand: "Intelbras",
-        model: "IT-100",
-        category: "Sensor de temperatura",
-        tariff: 0.8126,
-        residenceId: 1
-    };
-
+// Recebe os dados do formulário (ou usa o exemplo abaixo se nada for passado).
+async function criarDevice(device = {
+    name: "Sensor de temperatura",
+    brand: "Intelbras",
+    model: "IT-100",
+    category: "Sensor de temperatura",
+    power: 5.0,
+    hoursPerDay: 24,
+    daysPerMonth: 30,
+    imageUrl: "https://example.com/sensor.jpg",
+    ownerId: 1,
+    residenceId: 1,
+    memberIds: []
+}) {
     const response = await fetch(API_URL, {
         method: "POST",
         headers: {
@@ -27,7 +24,7 @@ async function criarDevice() {
     });
 
     if (!response.ok) {
-        throw new Error(`Erro ao criar dispositivo: ${response.status}`);
+        throw new Error(`Erro ao criar dispositivo: ${response.status} - ${await response.text()}`);
     }
 
     const resultado = await response.json();
@@ -41,7 +38,7 @@ async function buscarDevice(id) {
     const response = await fetch(`${API_URL}/${id}`);
 
     if (!response.ok) {
-        throw new Error(`Erro ao buscar dispositivo: ${response.status}`);
+        throw new Error(`Erro ao buscar dispositivo: ${response.status} - ${await response.text()}`);
     }
 
     const device = await response.json();
@@ -57,7 +54,7 @@ async function listarDevicesPorResidencia(residenceId) {
     );
 
     if (!response.ok) {
-        throw new Error(`Erro ao listar dispositivos: ${response.status}`);
+        throw new Error(`Erro ao listar dispositivos: ${response.status} - ${await response.text()}`);
     }
 
     const devices = await response.json();
@@ -66,18 +63,13 @@ async function listarDevicesPorResidencia(residenceId) {
     return devices;
 }
 
-// EXEMPLOS DE EXECUÇÃO
+// EXEMPLOS DE EXECUÇÃO (não roda mais sozinho: chame executar() no console se quiser testar)
 async function executar() {
     try {
-        // Cadastra um dispositivo
         await criarDevice();
-
         await buscarDevice(1);
-
         // await listarDevicesPorResidencia(1);
     } catch (error) {
         console.error("Falha na requisição:", error);
     }
 }
-
-executar();
