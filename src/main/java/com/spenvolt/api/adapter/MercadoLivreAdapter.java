@@ -14,7 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 // @Component
-public class MercadoLivreAdapter implements DeviceAdapter {
+public class MercadoLivreAdapter implements MarketplaceAdapter {
 
     private static final int MAX_RESULTS = 20;
 

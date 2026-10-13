@@ -8,7 +8,7 @@ async function criarDevice(device = {
     model: "IT-100",
     category: "Sensor de temperatura",
     power: 5.0,
-    hoursPerDay: 24,
+    shourPerDay: 24,
     daysPerMonth: 30,
     imageUrl: "https://example.com/sensor.jpg",
     ownerId: 1,
@@ -44,7 +44,22 @@ async function buscarDevice(id) {
     const device = await response.json();
     console.log("Dispositivo encontrado:", device);
 
-    return device;
+    const marketResponse = await fetch(
+        `http://localhost:8080/market/search?query=${encodeURIComponent(device.name)}`
+    );
+
+    if (!marketResponse.ok) {
+        throw new Error(`Erro ao buscar market: ${marketResponse.status} - ${await marketResponse.text()}`);
+    }
+
+    const market = await marketResponse.json();
+
+    const result = {
+        ...device,
+        market: market
+    };
+
+    return result;
 }
 
 // LISTAR TODOS OS DISPOSITIVOS DE UMA RESIDÊNCIA

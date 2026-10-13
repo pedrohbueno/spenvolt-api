@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
-public class ConsulAdapter implements DeviceAdapter {
+public class ConsulAdapter implements MarketplaceAdapter {
 
     private final RestTemplate restTemplate;
     private static final int MAX_RESULTS = 50;
@@ -42,16 +42,18 @@ public class ConsulAdapter implements DeviceAdapter {
                 String name = (String) item.get("productName");
                 String link = (String) item.get("link");
 
+                /*
                 // 1. Validação de Nome
                 if (name == null || isInvalidProductTitle(name)) {
                     continue;
-                }
+                }*/
 
                 // 2. Filtro por Categoria VTEX
                 List<?> categoriesRaw = asList(item.get("categories"));
+                /*
                 if (categoriesRaw != null && isAccessoryOrPartCategory(categoriesRaw)) {
                     continue;
-                }
+                }*/
 
                 // 3. Validação de Variações
                 List<?> itemsList = asList(item.get("items"));
@@ -87,6 +89,7 @@ public class ConsulAdapter implements DeviceAdapter {
 
                 // Extração da Voltagem/Potência (Obrigatória)
                 String power = extractPower(name);
+                Double numeric = extractNumericVoltage(power);
 
                 // Só adiciona se TIVER Preço E Power/Voltagem
                 if (price != null && power != null) {
@@ -95,7 +98,7 @@ public class ConsulAdapter implements DeviceAdapter {
                     p.setSource("consul");
                     p.setPrice(price);
                     p.setOriginalPrice(null);
-                    p.setPower(Double.valueOf(power));
+                    p.setPower(numeric);
                     p.setImageUrl(imageUrl);
                     p.setDeviceUrl(link);
 
@@ -130,6 +133,22 @@ public class ConsulAdapter implements DeviceAdapter {
         return null;
     }
 
+    private Double extractNumericVoltage(String power) {
+        if (power == null) {
+            return null;
+        }
+        Matcher matcher = Pattern
+                .compile("(?i)^(110|127|220)\\s*(?:v|volts)$")
+                .matcher(power.trim());
+
+        if (matcher.matches()) {
+            return Double.valueOf(matcher.group(1));
+        }
+
+        return null;
+    }
+
+
     private boolean isAccessoryOrPartCategory(List<?> categories) {
         StringBuilder categoriesText = new StringBuilder();
         for (Object cat : categories) {
@@ -139,12 +158,12 @@ public class ConsulAdapter implements DeviceAdapter {
         }
 
         String text = categoriesText.toString().toLowerCase();
-        String[] blacklist = {
+        String[] denylist = {
                 "peças", "pecas", "refil", "filtro", "acessórios", "acessorios",
                 "limpeza", "kit", "capa", "suporte", "mangueira", "válvula", "valvula"
         };
 
-        for (String keyword : blacklist) {
+        for (String keyword : denylist) {
             if (text.contains(keyword)) {
                 return true;
             }
@@ -155,13 +174,13 @@ public class ConsulAdapter implements DeviceAdapter {
     private boolean isInvalidProductTitle(String name) {
         String nameLower = name.toLowerCase();
 
-        String[] blacklist = {
+        String[] denylist = {
                 "refil", "filtro de água", "filtro para", "capa para", "kit de",
                 "detergente", "limpadora", "gaveta", "prateleira", "reserva",
                 "conector", "suporte", "mangueira", "placa eletrônica", "resistência"
         };
 
-        for (String badWord : blacklist) {
+        for (String badWord : denylist) {
             if (nameLower.contains(badWord)) {
                 return true;
             }

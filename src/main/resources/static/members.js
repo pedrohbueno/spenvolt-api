@@ -55,7 +55,6 @@ async function executar() {
     try {
         await criarMember();
         await buscarMember(1);
-        // await listarMembersPorResidencia(1);
     } catch (error) {
         console.error("Falha na requisição:", error);
     }

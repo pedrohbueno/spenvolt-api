@@ -1,6 +1,6 @@
 package com.spenvolt.api.service;
 
-import com.spenvolt.api.adapter.DeviceAdapter;
+import com.spenvolt.api.adapter.MarketplaceAdapter;
 import com.spenvolt.api.model.Device;
 import com.spenvolt.api.repository.DeviceOfferRepository;
 import jakarta.persistence.Id;
@@ -14,11 +14,11 @@ import java.util.Objects;
 @Service
 public class DeviceOfferService {
 
-    private final List<DeviceAdapter> adapters;
+    private final List<MarketplaceAdapter> adapters;
     private final DeviceOfferRepository repository;
 
     public DeviceOfferService(
-            List<DeviceAdapter> adapters,
+            List<MarketplaceAdapter> adapters,
             DeviceOfferRepository repository
     ) {
         this.adapters = adapters;
@@ -29,7 +29,7 @@ public class DeviceOfferService {
 
         List<Device> results = new ArrayList<>();
 
-        for (DeviceAdapter adapter : adapters) {
+        for (MarketplaceAdapter adapter : adapters) {
 
             if (!adapter.isAvailable()) {
                 continue;
@@ -55,7 +55,7 @@ public class DeviceOfferService {
             }
         }
 
-        return repository.findAll();
+        return results;
     }
 
     private boolean exists(Device device) {
