@@ -23,7 +23,6 @@ public class UserService {
         User user = new User();
         user.setName(req.getName());
         user.setEmail(req.getEmail());
-        user.setPhotoUrl(req.getPhotoUrl());
         user.setPasswordHash(encoder.encode(req.getPassword()));
         return toResponse(userRepository.save(user));
     }

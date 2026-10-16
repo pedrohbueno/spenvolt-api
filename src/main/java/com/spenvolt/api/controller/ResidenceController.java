@@ -28,7 +28,7 @@ public class ResidenceController {
     }
 
     @GetMapping
-    public List<ResidenceResponseDTO> findByUser(@RequestParam int userId) {
-        return residenceService.findByUser(userId);
+    public List<ResidenceResponseDTO> findByUser() {
+        return residenceService.findAll();
     }
 }

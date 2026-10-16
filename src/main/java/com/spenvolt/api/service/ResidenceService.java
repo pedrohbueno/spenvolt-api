@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ResidenceService {
 
     private final ResidenceRepository residenceRepository;
-    private final UserRepository userRepository;
+    private final AuthService authService;
 
     @Transactional
     public ResidenceResponseDTO create(ResidenceRequestDTO req) {
@@ -29,7 +29,7 @@ public class ResidenceService {
         r.setMonthlyKwhLimit(req.getMonthlyKwhLimit());
         r.setMonthlyCostLimit(req.getMonthlyCostLimit());
         r.setAlertThresholdPercent(req.getAlertThresholdPercent());
-        r.setOwner(userRepository.findById(req.getOwnerId()).orElseThrow());
+        r.setOwner(authService.getAuthenticatedUser());
         return toResponse(residenceRepository.save(r));
     }
 
@@ -39,8 +39,9 @@ public class ResidenceService {
     }
 
     @Transactional(readOnly = true)
-    public List<ResidenceResponseDTO> findByUser(int userId) {
+    public List<ResidenceResponseDTO> findAll() {
         List<ResidenceResponseDTO> result = new ArrayList<>();
+        int userId = authService.getAuthenticatedUser().getId();
         for (Residence r : residenceRepository.findByOwnerId(userId)) {
             result.add(toResponse(r));
         }
