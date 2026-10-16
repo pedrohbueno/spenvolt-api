@@ -21,7 +21,7 @@ public class UserController {
         return userService.create(req);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/me")
     public UserResponseDTO findById(@PathVariable int id) {
         return userService.findById(id);
     }

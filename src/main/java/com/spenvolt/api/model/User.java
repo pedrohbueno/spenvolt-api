@@ -35,4 +35,6 @@ public class User extends Profile {
     public boolean isActive() {
         return true;
     }
+
+
 }
