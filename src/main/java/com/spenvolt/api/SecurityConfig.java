@@ -9,16 +9,17 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @Configuration
 public class SecurityConfig {
@@ -56,17 +57,17 @@ public class SecurityConfig {
         SecretKey key = new SecretKeySpec(keyBytes, "HmacSHA256");
         return new NimbusJwtEncoder(new ImmutableSecret<>(key));
     }
-
     @Bean
-    public JwtDecoder jwtDecoder(@Value("${JWT_SECRET}") String secret) {
-        byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
-        if (keyBytes.length < 32) {
-            throw new IllegalArgumentException(
-                    "JWT_SECRET precisa ter pelo menos 32 bytes."
-            );
-        }
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
 
-        SecretKey key = new SecretKeySpec(keyBytes, "HmacSHA256");
-        return NimbusJwtDecoder.withSecretKey(key).macAlgorithm(MacAlgorithm.HS256).build();
+        config.setAllowedOriginPatterns(List.of("*"));
+        config.setAllowedMethods(List.of("*"));
+        config.setAllowedHeaders(List.of("*"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+
+        return source;
     }
 }
