@@ -8,7 +8,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/market")
-@CrossOrigin(origins = "*")
 public class DeviceOfferController {
 
     // Service responsável pela lógica de busca dos produtos.

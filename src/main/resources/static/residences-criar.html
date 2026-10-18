@@ -71,8 +71,8 @@
           
         </div>
         <div class="mb-3">
-          <label for="ownerId" class="form-label">ID do dono (usuário) <span class="text-danger">*</span></label>
-          <input type="number" class="form-control" id="ownerId" name="ownerId" placeholder="1" step="1" min="0" required>
+          <label for="userId" class="form-label">ID do dono (usuário) <span class="text-danger">*</span></label>
+          <input type="number" class="form-control" id="userId" name="userId" placeholder="1" step="1" min="0" required>
           
         </div>
         <div class="mb-3">
@@ -143,7 +143,7 @@
       document.getElementById("resultado").innerHTML = `<div class="alert alert-danger mb-0">${esc(msg)}</div>`;
     }
 
-    const tipos = {"name": "str", "address": "str", "tariff": "float", "ownerId": "int", "monthlyKwhLimit": "float", "monthlyCostLimit": "float", "alertThresholdPercent": "int"};
+    const tipos = {"name": "str", "address": "str", "tariff": "float", "userId": "int", "monthlyKwhLimit": "float", "monthlyCostLimit": "float", "alertThresholdPercent": "int"};
     const form = document.getElementById("form");
     const btn = document.getElementById("btn");
 

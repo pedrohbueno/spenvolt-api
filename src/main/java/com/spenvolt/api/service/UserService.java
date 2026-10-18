@@ -2,8 +2,8 @@ package com.spenvolt.api.service;
 
 
 
-import com.spenvolt.api.dto.UserRequestDTO;
-import com.spenvolt.api.dto.UserResponseDTO;
+import com.spenvolt.api.dto.request.UserRequestDTO;
+import com.spenvolt.api.dto.response.UserResponseDTO;
 import com.spenvolt.api.model.User;
 import com.spenvolt.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

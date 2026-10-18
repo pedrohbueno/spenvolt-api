@@ -1,6 +1,6 @@
 package com.spenvolt.api.service;
 
-import com.spenvolt.api.dto.UserRequestDTO;
+import com.spenvolt.api.dto.request.UserRequestDTO;
 import com.spenvolt.api.model.User;
 import com.spenvolt.api.repository.UserRepository;
 

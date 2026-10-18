@@ -27,23 +27,11 @@ public class Residence {
     private int alertThresholdPercent;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id")
-    private User owner;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public Double getTotalKwh(LocalDateTime ref) {
-        return 100.0;
-    };
-    public Double getTotalCost(LocalDateTime ref){
-        return 1000.0;
-    }
-    public Boolean isOverLimit(Double kwh, Double cos){
-        return false;
-    }
-    public List<Member> getActiveMember(){
-        return null;
-    }
 }

@@ -4,6 +4,7 @@ import com.spenvolt.api.adapter.MarketplaceAdapter;
 import com.spenvolt.api.model.Device;
 import com.spenvolt.api.repository.DeviceOfferRepository;
 import jakarta.persistence.Id;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -12,18 +13,11 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@RequiredArgsConstructor
 public class DeviceOfferService {
 
     private final List<MarketplaceAdapter> adapters;
     private final DeviceOfferRepository repository;
-
-    public DeviceOfferService(
-            List<MarketplaceAdapter> adapters,
-            DeviceOfferRepository repository
-    ) {
-        this.adapters = adapters;
-        this.repository = repository;
-    }
 
     public List<Device> search(String query) {
 

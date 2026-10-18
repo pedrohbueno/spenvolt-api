@@ -1,7 +1,7 @@
 package com.spenvolt.api.controller;
 
-import com.spenvolt.api.dto.MemberRequestDTO;
-import com.spenvolt.api.dto.MemberResponseDTO;
+import com.spenvolt.api.dto.request.MemberRequestDTO;
+import com.spenvolt.api.dto.response.MemberResponseDTO;
 import com.spenvolt.api.service.MemberService;
 import java.util.List;
 

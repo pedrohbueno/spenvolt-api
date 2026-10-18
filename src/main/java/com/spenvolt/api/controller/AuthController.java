@@ -1,6 +1,6 @@
 package com.spenvolt.api.controller;
 
-import com.spenvolt.api.dto.UserRequestDTO;
+import com.spenvolt.api.dto.request.UserRequestDTO;
 import com.spenvolt.api.service.AuthService;
 
 import lombok.RequiredArgsConstructor;

@@ -1,9 +1,9 @@
 package com.spenvolt.api.service;
 
 
-import com.spenvolt.api.dto.MemberRequestDTO;
+import com.spenvolt.api.dto.request.MemberRequestDTO;
 import com.spenvolt.api.model.Member;
-import com.spenvolt.api.dto.MemberResponseDTO;
+import com.spenvolt.api.dto.response.MemberResponseDTO;
 import com.spenvolt.api.repository.MemberRepository;
 import com.spenvolt.api.repository.ResidenceRepository;
 
@@ -21,6 +21,9 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final ResidenceRepository residenceRepository;
+    private final HistoryService historyService;
+    private final AuthService authService;
+
 
     @Transactional
     public MemberResponseDTO create(MemberRequestDTO req) {
@@ -29,7 +32,10 @@ public class MemberService {
         m.setEmail(req.getEmail());
         m.setPhotoUrl(req.getPhotoUrl());
         m.setResidence(residenceRepository.findById(req.getResidenceId()).orElseThrow());
-        return toResponse(memberRepository.save(m));
+
+        Member saved = memberRepository.save(m);
+        historyService.create("Dispositivo " + saved.getName() + " adicionado", saved.getResidence());
+        return toResponse(memberRepository.save(saved));
     }
 
     @Transactional(readOnly = true)
@@ -39,8 +45,9 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public List<MemberResponseDTO> findByResidence(int residenceId) {
+        int userId = authService.getAuthenticatedUser().getId();
         List<MemberResponseDTO> result = new ArrayList<>();
-        for (Member m : memberRepository.findByResidenceId(residenceId)) {
+        for (Member m : memberRepository.findByResidenceIdAndResidenceUserId(residenceId, userId)) {
             result.add(toResponse(m));
         }
         return result;

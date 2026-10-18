@@ -6,7 +6,7 @@ async function criarResidence(residence = {
     name: "Residência de teste",
     address: "Rua 31241 Jaguariuna",
     tariff: 0.8126,
-    ownerId: 1,
+    userId: 1,
     monthlyKwhLimit: 500,
     monthlyCostLimit: 406.30,
     alertThresholdPercent: 80

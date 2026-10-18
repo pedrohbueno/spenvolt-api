@@ -1,13 +1,12 @@
 package com.spenvolt.api.service;
 
-import com.spenvolt.api.dto.DeviceRequestDTO;
-import com.spenvolt.api.dto.DeviceResponseDTO;
+import com.spenvolt.api.dto.request.DeviceRequestDTO;
+import com.spenvolt.api.dto.response.DeviceResponseDTO;
 import com.spenvolt.api.model.Device;
 import com.spenvolt.api.model.Member;
 import com.spenvolt.api.repository.DeviceRepository;
 import com.spenvolt.api.repository.MemberRepository;
 import com.spenvolt.api.repository.ResidenceRepository;
-import com.spenvolt.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,9 +21,11 @@ import java.util.Set;
 public class DeviceService {
 
     private final DeviceRepository deviceRepository;
-    private final UserRepository userRepository;
     private final ResidenceRepository residenceRepository;
     private final MemberRepository memberRepository;
+    private final HistoryService historyService;
+    private final AuthService authService;
+
 
     @Transactional
     public DeviceResponseDTO create(DeviceRequestDTO req) {
@@ -47,7 +48,11 @@ public class DeviceService {
                 d.getMembers().add(member);
             }
         }
-        return toResponse(deviceRepository.save(d));
+
+        Device saved = deviceRepository.save(d);
+        historyService.create("Dispositivo " + saved.getName() + " adicionado", saved.getResidence());
+
+        return toResponse(saved);
     }
 
     @Transactional(readOnly = true)
@@ -57,8 +62,9 @@ public class DeviceService {
 
     @Transactional(readOnly = true)
     public List<DeviceResponseDTO> findByResidence(int residenceId) {
+        int userId = authService.getAuthenticatedUser().getId();
         List<DeviceResponseDTO> result = new ArrayList<>();
-        for (Device d : deviceRepository.findByResidenceId(residenceId)) {
+        for (Device d : deviceRepository.findByResidenceIdAndResidenceUserId(residenceId, userId)) {
             result.add(toResponse(d));
         }
         return result;
@@ -73,11 +79,11 @@ public class DeviceService {
         dto.setCategory(d.getCategory());
         dto.setPower(d.getPower());
         dto.setImageUrl(d.getImageUrl());
-        dto.setMonthlyKwh(d.calcMonthlyKwh());
+        dto.setMonthlyKwh(0.0);
 
         if (d.getResidence() != null) {
             dto.setResidenceId(d.getResidence().getId());
-            dto.setMonthlyCost(d.calcMonthlyCost(d.getResidence().getTariff()));
+            dto.setMonthlyCost(0.0);
         }
 
         Set<Integer> memberIds = new HashSet<>();

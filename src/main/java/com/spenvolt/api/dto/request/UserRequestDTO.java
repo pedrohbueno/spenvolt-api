@@ -1,4 +1,4 @@
-package com.spenvolt.api.dto;
+package com.spenvolt.api.dto.request;
 
 import lombok.Data;
 

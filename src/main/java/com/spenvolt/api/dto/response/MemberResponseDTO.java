@@ -1,4 +1,4 @@
-package com.spenvolt.api.dto;
+package com.spenvolt.api.dto.response;
 
 
 import lombok.Data;
@@ -11,7 +11,7 @@ public class MemberResponseDTO {
     private String name;
     private String email;
     private String photoUrl;
-    private int ResidenceId;
+    private int residenceId;
     private LocalDateTime createdAt;
 
 

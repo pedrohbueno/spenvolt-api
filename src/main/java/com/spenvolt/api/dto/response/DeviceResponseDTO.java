@@ -1,4 +1,4 @@
-package com.spenvolt.api.dto;
+package com.spenvolt.api.dto.response;
 
 import java.util.Set;
 import lombok.Data;
@@ -14,7 +14,7 @@ public class DeviceResponseDTO {
     private Double hoursPerDay;
     private Integer daysPerMonth;
     private String imageUrl;
-    private int ownerId;
+    private int userId;
     private int residenceId;
     private Set<Integer> memberIds;
     private Double monthlyKwh;

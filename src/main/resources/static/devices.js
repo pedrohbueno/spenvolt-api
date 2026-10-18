@@ -11,7 +11,7 @@ async function criarDevice(device = {
     shourPerDay: 24,
     daysPerMonth: 30,
     imageUrl: "https://example.com/sensor.jpg",
-    ownerId: 1,
+    userId: 1,
     residenceId: 1,
     memberIds: []
 }) {

@@ -4,11 +4,10 @@ package com.spenvolt.api.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.spenvolt.api.dto.ResidenceRequestDTO;
-import com.spenvolt.api.dto.ResidenceResponseDTO;
+import com.spenvolt.api.dto.request.ResidenceRequestDTO;
+import com.spenvolt.api.dto.response.ResidenceResponseDTO;
 import com.spenvolt.api.model.Residence;
 import com.spenvolt.api.repository.ResidenceRepository;
-import com.spenvolt.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +18,7 @@ public class ResidenceService {
 
     private final ResidenceRepository residenceRepository;
     private final AuthService authService;
+    private final HistoryService historyService;
 
     @Transactional
     public ResidenceResponseDTO create(ResidenceRequestDTO req) {
@@ -29,8 +29,15 @@ public class ResidenceService {
         r.setMonthlyKwhLimit(req.getMonthlyKwhLimit());
         r.setMonthlyCostLimit(req.getMonthlyCostLimit());
         r.setAlertThresholdPercent(req.getAlertThresholdPercent());
-        r.setOwner(authService.getAuthenticatedUser());
+        r.setUser(authService.getAuthenticatedUser());
+
+
+        Residence saved = residenceRepository.save(r);
+        historyService.create("Dispositivo " + saved.getName() + " adicionado", saved);
+
         return toResponse(residenceRepository.save(r));
+
+
     }
 
     @Transactional(readOnly = true)
@@ -42,7 +49,7 @@ public class ResidenceService {
     public List<ResidenceResponseDTO> findAll() {
         List<ResidenceResponseDTO> result = new ArrayList<>();
         int userId = authService.getAuthenticatedUser().getId();
-        for (Residence r : residenceRepository.findByOwnerId(userId)) {
+        for (Residence r : residenceRepository.findByUserId(userId)) {
             result.add(toResponse(r));
         }
         return result;
@@ -57,7 +64,7 @@ public class ResidenceService {
         dto.setMonthlyKwhLimit(r.getMonthlyKwhLimit());
         dto.setMonthlyCostLimit(r.getMonthlyCostLimit());
         dto.setAlertThresholdPercent(r.getAlertThresholdPercent());
-        dto.setOwnerId(r.getOwner().getId());
+        dto.setUserId(r.getUser().getId());
         dto.setCreatedAt(r.getCreatedAt());
         return dto;
     }

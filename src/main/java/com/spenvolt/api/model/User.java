@@ -20,18 +20,6 @@ public class User extends Profile {
     private Boolean active;
     private LocalDateTime lastLoginAt;
 
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    public void activate(){
-    }
-    public void deactivate(){
-    }
-    public void changePassword(String hash){
-    }
-
-
     public boolean isActive() {
         return true;
     }

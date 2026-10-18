@@ -1,7 +1,7 @@
 package com.spenvolt.api.controller;
 
-import com.spenvolt.api.dto.ResidenceRequestDTO;
-import com.spenvolt.api.dto.ResidenceResponseDTO;
+import com.spenvolt.api.dto.request.ResidenceRequestDTO;
+import com.spenvolt.api.dto.response.ResidenceResponseDTO;
 import com.spenvolt.api.service.ResidenceService;
 import java.util.List;
 

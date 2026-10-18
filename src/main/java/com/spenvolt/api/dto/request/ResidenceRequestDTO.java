@@ -1,19 +1,14 @@
-package com.spenvolt.api.dto;
+package com.spenvolt.api.dto.request;
 
-
-import java.time.LocalDateTime;
 
 import lombok.Data;
 
 @Data
-public class ResidenceResponseDTO {
-    private int id;
+public class ResidenceRequestDTO {
     private String name;
     private String address;
     private Double tariff;
     private Double monthlyKwhLimit;
     private Double monthlyCostLimit;
     private Integer alertThresholdPercent;
-    private int ownerId;
-    private LocalDateTime createdAt;
 }

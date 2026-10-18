@@ -43,15 +43,15 @@ public class Device {
     )
     private List<Member> members;
 
-    @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public Double calcMonthlyKwh(){
-        return 0.0;
+    @PrePersist
+    protected void onCreate() {
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
     }
-    public Double calcMonthlyCost(Double tariff){
-        return 0.0;
-    }
+
     
 }

@@ -3,8 +3,8 @@ package com.spenvolt.api.controller;
 
 import java.util.List;
 
-import com.spenvolt.api.dto.DeviceRequestDTO;
-import com.spenvolt.api.dto.DeviceResponseDTO;
+import com.spenvolt.api.dto.request.DeviceRequestDTO;
+import com.spenvolt.api.dto.response.DeviceResponseDTO;
 import com.spenvolt.api.service.DeviceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
