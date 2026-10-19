@@ -58,8 +58,8 @@ public class AuthService {
         claimsBuilder.issuedAt(now);
         claimsBuilder.expiresAt(now.plusSeconds(3600));
         claimsBuilder.subject(user.getEmail());
-        JwtClaimsSet claims = claimsBuilder.build();
         claimsBuilder.claim("name", user.getName());
+        JwtClaimsSet claims = claimsBuilder.build();
 
         JwsHeader header = JwsHeader.with(MacAlgorithm.HS256).build();
 
