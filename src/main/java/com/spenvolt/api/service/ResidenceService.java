@@ -33,7 +33,10 @@ public class ResidenceService {
 
 
         Residence saved = residenceRepository.save(r);
-        historyService.create("Dispositivo " + saved.getName() + " adicionado", saved);
+        historyService.create(
+                "RESIDENCE_ADDED",
+                saved
+        );
 
         return toResponse(residenceRepository.save(r));
 

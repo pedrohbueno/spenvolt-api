@@ -18,7 +18,7 @@ public class History {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String message;
+    private String type;
 
     @ManyToOne
     @JoinColumn(name = "residence_id")

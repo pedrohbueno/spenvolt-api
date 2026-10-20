@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class HistoryRequestDTO {
-    private String message;
+    private String type;
     private int userId;
     private int residenceId;
     private LocalDateTime createdAt;

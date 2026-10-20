@@ -23,9 +23,9 @@ public class HistoryService {
 
 
     @Transactional
-    public HistoryResponseDTO create(String message, Residence residence) {
+    public HistoryResponseDTO create(String type, Residence residence) {
         History h = new History();
-        h.setMessage(message);
+        h.setType(type);
         h.setUser(authService.getAuthenticatedUser());
         h.setResidence(residence);
         return toResponse(historyRepository.save(h));
@@ -53,7 +53,7 @@ public class HistoryService {
 
     private HistoryResponseDTO toResponse(History m) {
         HistoryResponseDTO dto = new HistoryResponseDTO();
-        dto.setMessage(m.getMessage());
+        dto.setType(m.getType());
         dto.setResidenceId(m.getResidence().getId());
         return dto;
     }

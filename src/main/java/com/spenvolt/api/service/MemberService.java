@@ -34,7 +34,10 @@ public class MemberService {
         m.setResidence(residenceRepository.findById(req.getResidenceId()).orElseThrow());
 
         Member saved = memberRepository.save(m);
-        historyService.create("Dispositivo " + saved.getName() + " adicionado", saved.getResidence());
+        historyService.create(
+                "MEMBER_ADDED",
+                saved.getResidence()
+        );
         return toResponse(memberRepository.save(saved));
     }
 

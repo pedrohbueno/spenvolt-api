@@ -50,7 +50,10 @@ public class DeviceService {
         }
 
         Device saved = deviceRepository.save(d);
-        historyService.create("Dispositivo " + saved.getName() + " adicionado", saved.getResidence());
+        historyService.create(
+                "DEVICE_ADDED",
+                saved.getResidence()
+        );
 
         return toResponse(saved);
     }
