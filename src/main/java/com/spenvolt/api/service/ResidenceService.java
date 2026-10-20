@@ -35,6 +35,8 @@ public class ResidenceService {
         Residence saved = residenceRepository.save(r);
         historyService.create(
                 "RESIDENCE_ADDED",
+                saved.getId(),
+                saved.getName(),
                 saved
         );
 

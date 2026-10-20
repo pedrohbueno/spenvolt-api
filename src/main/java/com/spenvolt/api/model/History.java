@@ -19,6 +19,8 @@ public class History {
     private int id;
 
     private String type;
+    private int entityId;
+    private String entityName;
 
     @ManyToOne
     @JoinColumn(name = "residence_id")

@@ -52,6 +52,8 @@ public class DeviceService {
         Device saved = deviceRepository.save(d);
         historyService.create(
                 "DEVICE_ADDED",
+                saved.getId(),
+                saved.getName(),
                 saved.getResidence()
         );
 

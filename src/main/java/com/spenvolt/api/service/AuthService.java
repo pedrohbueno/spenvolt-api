@@ -56,7 +56,7 @@ public class AuthService {
         JwtClaimsSet.Builder claimsBuilder = JwtClaimsSet.builder();
         claimsBuilder.issuer("spenvolt-api");
         claimsBuilder.issuedAt(now);
-        claimsBuilder.expiresAt(now.plusSeconds(3600));
+        claimsBuilder.expiresAt(now.plusSeconds(12 * 3600));
         claimsBuilder.subject(user.getEmail());
         claimsBuilder.claim("name", user.getName());
         JwtClaimsSet claims = claimsBuilder.build();

@@ -36,6 +36,8 @@ public class MemberService {
         Member saved = memberRepository.save(m);
         historyService.create(
                 "MEMBER_ADDED",
+                saved.getId(),
+                saved.getName(),
                 saved.getResidence()
         );
         return toResponse(memberRepository.save(saved));
