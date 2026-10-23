@@ -55,6 +55,7 @@ public class HistoryService {
 
     private HistoryResponseDTO toResponse(History h) {
         HistoryResponseDTO dto = new HistoryResponseDTO();
+        dto.setId(h.getId());
         dto.setType(h.getType());
         dto.setEntityId(h.getEntityId());
         dto.setEntityName(h.getEntityName());
