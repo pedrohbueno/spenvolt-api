@@ -22,11 +22,6 @@ public class Device {
     private int id;
 
     private String name;
-    private String source;
-    private Float price;
-    private Float originalPrice;
-    private String imageUrl;
-    private String deviceUrl;
     private Double power;
     private String brand;
     private String model;
