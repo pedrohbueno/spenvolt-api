@@ -60,6 +60,7 @@ public class HistoryService {
         dto.setEntityId(h.getEntityId());
         dto.setEntityName(h.getEntityName());
         dto.setResidenceId(h.getResidence().getId());
+        dto.setCreatedAt(h.getCreatedAt());
         return dto;
     }
 
