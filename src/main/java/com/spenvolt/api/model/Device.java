@@ -8,6 +8,7 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,7 +31,8 @@ public class Device {
     private String brand;
     private String model;
     private String category;
-    private Double tariff;
+    private Double hoursPerDay;
+    private Integer daysPerMonth;
 
     @ManyToOne
     @JoinColumn(name = "residence_id")
@@ -41,7 +43,7 @@ public class Device {
             joinColumns = @JoinColumn(name = "device_id"),
             inverseJoinColumns = @JoinColumn(name = "member_id")
     )
-    private List<Member> members;
+    private List<Member> members = new ArrayList<>();
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

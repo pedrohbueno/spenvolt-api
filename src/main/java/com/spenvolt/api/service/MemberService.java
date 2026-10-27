@@ -2,8 +2,10 @@ package com.spenvolt.api.service;
 
 
 import com.spenvolt.api.dto.request.MemberRequestDTO;
+import com.spenvolt.api.model.Device;
 import com.spenvolt.api.model.Member;
 import com.spenvolt.api.dto.response.MemberResponseDTO;
+import com.spenvolt.api.repository.DeviceRepository;
 import com.spenvolt.api.repository.MemberRepository;
 import com.spenvolt.api.repository.ResidenceRepository;
 
@@ -19,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberService {
 
+    private final DeviceRepository deviceRepository;
     private final MemberRepository memberRepository;
     private final ResidenceRepository residenceRepository;
     private final HistoryService historyService;
@@ -56,6 +59,15 @@ public class MemberService {
             result.add(toResponse(m));
         }
         return result;
+    }
+    @Transactional
+    public void delete(int id) {
+        Member m = memberRepository.findById(id).orElseThrow();
+        for (Device d : deviceRepository.findByMembersId(id)) {
+            d.getMembers().removeIf(x -> x.getId() == id);
+        }
+        historyService.create("MEMBER_REMOVED", m.getId(), m.getName(), m.getResidence());
+        memberRepository.delete(m);
     }
 
     private MemberResponseDTO toResponse(Member m) {

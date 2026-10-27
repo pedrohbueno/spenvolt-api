@@ -31,4 +31,15 @@ public class ResidenceController {
     public List<ResidenceResponseDTO> findByUser() {
         return residenceService.findAll();
     }
+
+    @PutMapping("/{id}")
+    public ResidenceResponseDTO update(@PathVariable int id, @RequestBody ResidenceRequestDTO req) {
+        return residenceService.update(id, req);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable int id) {
+        residenceService.delete(id);
+    }
 }

@@ -24,6 +24,7 @@ public class UserService {
         user.setName(req.getName());
         user.setEmail(req.getEmail());
         user.setPasswordHash(encoder.encode(req.getPassword()));
+
         return toResponse(userRepository.save(user));
     }
 
@@ -40,6 +41,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserResponseDTO findById(int id) {
+
         return toResponse(userRepository.findById(id).orElseThrow());
     }
 }

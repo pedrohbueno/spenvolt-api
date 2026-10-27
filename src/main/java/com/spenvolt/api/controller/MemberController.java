@@ -31,4 +31,10 @@ public class MemberController {
     public List<MemberResponseDTO> findByResidence(@RequestParam int residenceId) {
         return memberService.findByResidence(residenceId);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable int id) {
+        memberService.delete(id);
+    }
 }

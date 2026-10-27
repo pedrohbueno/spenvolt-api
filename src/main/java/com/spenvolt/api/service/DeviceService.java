@@ -7,6 +7,7 @@ import com.spenvolt.api.model.Member;
 import com.spenvolt.api.repository.DeviceRepository;
 import com.spenvolt.api.repository.MemberRepository;
 import com.spenvolt.api.repository.ResidenceRepository;
+import com.spenvolt.api.service.ConsumptionCalculator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,9 @@ public class DeviceService {
     private final HistoryService historyService;
     private final AuthService authService;
 
+    private final ConsumptionCalculator calculator;
+
+
 
     @Transactional
     public DeviceResponseDTO create(DeviceRequestDTO req) {
@@ -37,6 +41,8 @@ public class DeviceService {
         d.setPower(req.getPower());
         d.setImageUrl(req.getImageUrl());
         d.setResidence(residenceRepository.findById(req.getResidenceId()).orElseThrow());
+        d.setHoursPerDay(req.getHoursPerDay());
+        d.setDaysPerMonth(req.getDaysPerMonth());
 
         if (req.getMemberIds() != null) {
             for (Integer memberId : req.getMemberIds()) {
@@ -74,6 +80,12 @@ public class DeviceService {
         }
         return result;
     }
+    @Transactional
+    public void delete(int id) {
+        Device d = deviceRepository.findById(id).orElseThrow();
+        historyService.create("DEVICE_REMOVED", d.getId(), d.getName(), d.getResidence());
+        deviceRepository.delete(d);
+    }
 
     private DeviceResponseDTO toResponse(Device d) {
         DeviceResponseDTO dto = new DeviceResponseDTO();
@@ -84,11 +96,17 @@ public class DeviceService {
         dto.setCategory(d.getCategory());
         dto.setPower(d.getPower());
         dto.setImageUrl(d.getImageUrl());
-        dto.setMonthlyKwh(0.0);
+        dto.setHoursPerDay(d.getHoursPerDay());
+        dto.setDaysPerMonth(d.getDaysPerMonth());
+
+        double kwh = calculator.monthlyKwh(d.getPower(), d.getHoursPerDay(), d.getDaysPerMonth());
+
+
+        dto.setMonthlyKwh(kwh);
 
         if (d.getResidence() != null) {
             dto.setResidenceId(d.getResidence().getId());
-            dto.setMonthlyCost(0.0);
+            dto.setMonthlyCost(calculator.monthlyCost(kwh, d.getResidence().getTariff()));
         }
 
         Set<Integer> memberIds = new HashSet<>();

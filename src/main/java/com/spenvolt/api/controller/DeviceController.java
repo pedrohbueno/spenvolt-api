@@ -32,4 +32,10 @@ public class DeviceController {
     public List<DeviceResponseDTO> findByResidence(@PathVariable int residenceId) {
         return deviceService.findByResidence(residenceId);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable int id){
+        deviceService.delete(id);
+    }
 }

@@ -9,4 +9,6 @@ public interface HistoryRepository extends JpaRepository<History, Integer> {
     History[] findByResidenceIdOrderByCreatedAtDesc(int residenceId, int userId);
 
     History[] findByUserIdOrderByCreatedAtDesc(int userId);
+    void deleteByResidenceId(int residenceId);
+
 }

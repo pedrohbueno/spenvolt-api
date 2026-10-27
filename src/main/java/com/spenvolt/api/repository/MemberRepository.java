@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Integer>{
     Member[] findByResidenceIdAndResidenceUserId(int residenceId, int userId);
+    void deleteByResidenceId(int residenceId);
+
 }
