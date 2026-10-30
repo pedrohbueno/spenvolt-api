@@ -1,10 +1,10 @@
 package com.spenvolt.api.adapter;
 
-import com.spenvolt.api.model.Device;
+import com.spenvolt.api.model.DeviceOffer;
 
 import java.util.List;
 
 public interface MarketplaceAdapter {
-    List<Device> search(String query);
+    List<DeviceOffer> search(String query);
     boolean isAvailable();
 }

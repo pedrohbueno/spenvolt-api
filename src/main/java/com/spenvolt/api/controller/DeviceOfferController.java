@@ -1,6 +1,6 @@
 package com.spenvolt.api.controller;
 
-import com.spenvolt.api.model.Device;
+import com.spenvolt.api.model.DeviceOffer;
 import com.spenvolt.api.service.DeviceOfferService;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +23,7 @@ public class DeviceOfferController {
     //
     // O @RequestParam pega o valor de "query" da URL.
     @GetMapping("/search")
-    public List<Device> search(@RequestParam String query) {
+    public List<DeviceOffer> search(@RequestParam String query) {
 
         // Passa a pesquisa para o Service.
         return service.search(query);

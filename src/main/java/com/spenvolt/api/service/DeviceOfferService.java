@@ -1,7 +1,7 @@
 package com.spenvolt.api.service;
 
 import com.spenvolt.api.adapter.MarketplaceAdapter;
-import com.spenvolt.api.model.Device;
+import com.spenvolt.api.model.DeviceOffer;
 import com.spenvolt.api.repository.DeviceOfferRepository;
 import jakarta.persistence.Id;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +19,9 @@ public class DeviceOfferService {
     private final List<MarketplaceAdapter> adapters;
     private final DeviceOfferRepository repository;
 
-    public List<Device> search(String query) {
+    public List<DeviceOffer> search(String query) {
 
-        List<Device> results = new ArrayList<>();
+        List<DeviceOffer> results = new ArrayList<>();
 
         for (MarketplaceAdapter adapter : adapters) {
 
@@ -30,16 +30,16 @@ public class DeviceOfferService {
             }
 
             try {
-                List<Device> found = adapter.search(query);
+                List<DeviceOffer> found = adapter.search(query);
 
-                for (Device device : found) {
+                for (DeviceOffer DeviceOffer : found) {
 
                     // Se já existe exatamente igual, não salva novamente
-                    if (exists(device)) {
+                    if (exists(DeviceOffer)) {
                         continue;
                     }
 
-                    Device saved = repository.save(device);
+                    DeviceOffer saved = repository.save(DeviceOffer);
 
                     results.add(saved);
                 }
@@ -52,13 +52,13 @@ public class DeviceOfferService {
         return results;
     }
 
-    private boolean exists(Device device) {
+    private boolean exists(DeviceOffer DeviceOffer) {
 
-        List<Device> devices = repository.findAll();
+        List<DeviceOffer> devices = repository.findAll();
 
-        for (Device existing : devices) {
+        for (DeviceOffer existing : devices) {
 
-            if (sameDevice(device, existing)) {
+            if (sameDevice(DeviceOffer, existing)) {
                 return true;
             }
         }
@@ -66,10 +66,10 @@ public class DeviceOfferService {
         return false;
     }
 
-    private boolean sameDevice(Device device1, Device device2) {
+    private boolean sameDevice(DeviceOffer device1, DeviceOffer device2) {
 
         try {
-            for (Field field : Device.class.getDeclaredFields()) {
+            for (Field field : DeviceOffer.class.getDeclaredFields()) {
 
                 // Ignora somente o ID
                 if (field.isAnnotationPresent(Id.class)) {

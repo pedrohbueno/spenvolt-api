@@ -1,6 +1,6 @@
 package com.spenvolt.api.adapter;
 
-import com.spenvolt.api.model.Device;
+import com.spenvolt.api.model.DeviceOffer;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URLEncoder;
@@ -23,8 +23,8 @@ public class FastShopAdapter implements MarketplaceAdapter {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<Device> search(String query) {
-        List<Device> devices = new ArrayList<>();
+    public List<DeviceOffer> search(String query) {
+        List<DeviceOffer> devices = new ArrayList<>();
 
         try {
             String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
@@ -67,7 +67,7 @@ public class FastShopAdapter implements MarketplaceAdapter {
                 }
 
                 if (name != null && price != null) {
-                    Device p = new Device();
+                    DeviceOffer p = new DeviceOffer();
                     p.setName(name);
                     p.setSource("fastshop");
                     p.setPrice(price);

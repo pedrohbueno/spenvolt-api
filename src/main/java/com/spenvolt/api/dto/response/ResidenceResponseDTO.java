@@ -11,9 +11,12 @@ public class ResidenceResponseDTO {
     private String name;
     private String address;
     private Double tariff;
+    private double monthlyKwh;
+    private double monthlyCost;
     private Double monthlyKwhLimit;
     private Double monthlyCostLimit;
     private Integer alertThresholdPercent;
     private int userId;
     private LocalDateTime createdAt;
+
 }

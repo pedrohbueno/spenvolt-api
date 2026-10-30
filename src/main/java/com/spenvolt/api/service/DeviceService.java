@@ -39,7 +39,6 @@ public class DeviceService {
         d.setModel(req.getModel());
         d.setCategory(req.getCategory());
         d.setPower(req.getPower());
-        d.setImageUrl(req.getImageUrl());
         d.setResidence(residenceRepository.findById(req.getResidenceId()).orElseThrow());
         d.setHoursPerDay(req.getHoursPerDay());
         d.setDaysPerMonth(req.getDaysPerMonth());
@@ -95,7 +94,6 @@ public class DeviceService {
         dto.setModel(d.getModel());
         dto.setCategory(d.getCategory());
         dto.setPower(d.getPower());
-        dto.setImageUrl(d.getImageUrl());
         dto.setHoursPerDay(d.getHoursPerDay());
         dto.setDaysPerMonth(d.getDaysPerMonth());
 

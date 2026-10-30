@@ -1,6 +1,6 @@
 package com.spenvolt.api.adapter;
 
-import com.spenvolt.api.model.Device;
+import com.spenvolt.api.model.DeviceOffer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,9 +21,9 @@ public class ConsulAdapter implements MarketplaceAdapter {
     }
 
     @Override
-    public List<Device> search(String query) {
+    public List<DeviceOffer> search(String query) {
         System.out.println(">>> INICIANDO BUSCA NO ADAPTER CONSUL PARA: " + query);
-        List<Device> devices = new ArrayList<>();
+        List<DeviceOffer> DeviceOffers = new ArrayList<>();
         String url = "https://www.consul.com.br/api/catalog_system/pub/products/search?ft=" + query
                 + "&_from=50&_to=" + (MAX_RESULTS - 1);
 
@@ -32,7 +32,7 @@ public class ConsulAdapter implements MarketplaceAdapter {
 
             if (response == null || response.isEmpty()) {
                 System.out.println(">>> Consul retornou resposta vazia.");
-                return devices;
+                return DeviceOffers;
             }
 
             for (Object itemObj : response) {
@@ -93,7 +93,7 @@ public class ConsulAdapter implements MarketplaceAdapter {
 
                 // Só adiciona se TIVER Preço E Power/Voltagem
                 if (price != null && power != null) {
-                    Device p = new Device();
+                    DeviceOffer p = new DeviceOffer();
                     p.setName(name);
                     p.setSource("consul");
                     p.setPrice(price);
@@ -102,17 +102,17 @@ public class ConsulAdapter implements MarketplaceAdapter {
                     p.setImageUrl(imageUrl);
                     p.setDeviceUrl(link);
 
-                    devices.add(p);
+                    DeviceOffers.add(p);
                 }
             }
 
-            System.out.println(">>> Produtos válidos encontrados na Consul: " + devices.size());
+            System.out.println(">>> Produtos válidos encontrados na Consul: " + DeviceOffers.size());
 
         } catch (Exception e) {
             System.err.println("Erro ao buscar produtos na API da Consul: " + e.getMessage());
         }
 
-        return devices;
+        return DeviceOffers;
     }
 
     @Override

@@ -22,11 +22,6 @@ public class Device {
     private int id;
 
     private String name;
-    private String source;
-    private Float price;
-    private Float originalPrice;
-    private String imageUrl;
-    private String deviceUrl;
     private Double power;
     private String brand;
     private String model;
@@ -37,6 +32,11 @@ public class Device {
     @ManyToOne
     @JoinColumn(name = "residence_id")
     private Residence residence;
+
+    @ManyToOne
+    @JoinColumn(name = "room_id")
+    private Room room;
+
     @ManyToMany
     @JoinTable(
             name = "device_members",
@@ -44,6 +44,7 @@ public class Device {
             inverseJoinColumns = @JoinColumn(name = "member_id")
     )
     private List<Member> members = new ArrayList<>();
+
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

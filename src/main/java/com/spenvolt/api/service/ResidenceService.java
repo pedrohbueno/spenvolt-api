@@ -2,10 +2,13 @@ package com.spenvolt.api.service;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.spenvolt.api.dto.request.ResidenceRequestDTO;
 import com.spenvolt.api.dto.response.ResidenceResponseDTO;
+import com.spenvolt.api.model.Device;
 import com.spenvolt.api.model.Residence;
 import com.spenvolt.api.repository.DeviceRepository;
 import com.spenvolt.api.repository.HistoryRepository;
@@ -25,6 +28,7 @@ public class ResidenceService {
     private final ResidenceRepository residenceRepository;
     private final AuthService authService;
     private final HistoryService historyService;
+    private final ConsumptionCalculator calculator;
 
 
     @Transactional
@@ -61,10 +65,22 @@ public class ResidenceService {
 
     @Transactional(readOnly = true)
     public List<ResidenceResponseDTO> findAll() {
-        List<ResidenceResponseDTO> result = new ArrayList<>();
         int userId = authService.getAuthenticatedUser().getId();
+
+        // Uma query só com todos os devices do usuário, somados por residência.
+        Map<Integer, Double> kwhByResidence = new HashMap<>();
+        for (Device d : deviceRepository.findByResidenceUserId(userId)) {
+            double kwh = calculator.monthlyKwh(d.getPower(), d.getHoursPerDay(), d.getDaysPerMonth());
+            kwhByResidence.merge(d.getResidence().getId(), kwh, Double::sum);
+        }
+
+        List<ResidenceResponseDTO> result = new ArrayList<>();
         for (Residence r : residenceRepository.findByUserId(userId)) {
-            result.add(toResponse(r));
+            ResidenceResponseDTO dto = toResponse(r);
+            double kwh = kwhByResidence.getOrDefault(r.getId(), 0.0);
+            dto.setMonthlyKwh(kwh);
+            dto.setMonthlyCost(calculator.monthlyCost(kwh, r.getTariff()));
+            result.add(dto);
         }
         return result;
     }

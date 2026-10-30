@@ -1,6 +1,6 @@
 package com.spenvolt.api.adapter;
 
-import com.spenvolt.api.model.Device;
+import com.spenvolt.api.model.DeviceOffer;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -19,8 +19,8 @@ public class MercadoLivreAdapter implements MarketplaceAdapter {
     private static final int MAX_RESULTS = 20;
 
     @Override
-    public List<Device> search(String query) {
-        List<Device> devices = new ArrayList<>();
+    public List<DeviceOffer> search(String query) {
+        List<DeviceOffer> devices = new ArrayList<>();
 
         try {
             String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
@@ -57,7 +57,7 @@ public class MercadoLivreAdapter implements MarketplaceAdapter {
                 String name = matcher.group(3).trim();
                 String priceStr = matcher.group(4).replace(".", "").replace(",", ".").trim();
 
-                Device p = new Device();
+                DeviceOffer p = new DeviceOffer();
                 p.setName(name);
                 p.setSource("mercadolivre");
                 p.setPrice(Float.parseFloat(priceStr));
